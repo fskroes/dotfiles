@@ -1,7 +1,6 @@
 tap "commitdev/zero"
 tap "fairwindsops/tap"
 tap "fluxcd/tap"
-tap "hashicorp/tap"
 tap "helm/tap"
 tap "heroku/brew"
 tap "homebrew/autoupdate"
