@@ -1,0 +1,4 @@
+[commit]
+	template = ~/.gitmessage
+[user]
+	email = "fernando.silva.kroes@ordina.nl"
