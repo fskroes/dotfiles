@@ -67,7 +67,7 @@ plugins=(
   terraform   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/terraform
   thefuck     # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/thefuck
   vscode      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/vscode
-  yarn        # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/yarn
+  yarn        # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/yarn 
   zsh-syntax-highlighting
   nvm
 )
