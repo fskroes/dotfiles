@@ -72,7 +72,8 @@ plugins=(
   vscode      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/vscode
   yarn        # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/yarn 
   nvm 
-  zsh-syntax-highlighting
+  zsh-syntax-highlighting 
+  zsh-autosuggestions
 )
 
 # Init Oh My Zsh
