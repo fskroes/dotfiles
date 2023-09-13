@@ -64,7 +64,6 @@ plugins=(
   npm         # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/npm
   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/pass
   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
-  terraform   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/terraform
   thefuck     # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/thefuck
   vscode      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/vscode
   yarn        # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/yarn 
@@ -146,11 +145,6 @@ export SSH_AUTH_SOCK=$HOME/Library/Containers/com.maxgoedjen.Secretive.SecretAge
 # SSH with SmartCard (Yubikey/Ledger)
 # export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
 # gpgconf --launch gpg-agent
-
-# ---------------------------------------------------------------------------------------------------------------------
-# Starship
-# ---------------------------------------------------------------------------------------------------------------------
-eval "$(starship init zsh)"
 
 # ---------------------------------------------------------------------------------------------------------------------
 # TheFuck
