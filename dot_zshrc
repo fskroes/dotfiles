@@ -28,8 +28,8 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 # Theme (https://github.com/ohmyzsh/ohmyzsh/wiki/Themes)
-#ZSH_THEME="powerlevel10k/powerlevel10k"
-ZSH_THEME="alanpeabody"
+ZSH_THEME="powerlevel10k/powerlevel10k"
+#ZSH_THEME="alanpeabody"
 
 # Specify cache dir outside of the Oh My Zsh installation
 ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/ohmyzsh"
