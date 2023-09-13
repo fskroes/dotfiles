@@ -51,6 +51,7 @@ HIST_STAMPS="dd.mm.yyyy"
 
 # Plugins
 plugins=(
+  git 
   aliases     # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aliases
   aws         # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aws
   direnv      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/direnv
