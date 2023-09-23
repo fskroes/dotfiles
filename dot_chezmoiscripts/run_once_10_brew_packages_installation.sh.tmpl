@@ -1,1 +1,18 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+ #!/bin/bash
 
+ #set -eufo pipefail
+
+ #formulae=(	
+ #)
+ #casks=(
+ #	iterm2
+ #)
+
+ #brew update
+
+ #brew install ${formulae[@]}
+ #brew install --cask ${casks[@]}
+
+ #brew cleanup
+ {{ end }}
