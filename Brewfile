@@ -53,6 +53,7 @@ cask "visual-studio-code"
 cask "jetbrains-toolbox"
 cask "obsidian"
 cask "iterm2"
+cask "github"
 mas "Amphetamine", id: 937984704
 mas "Bitwarden", id: 1352778147
 mas "Magnet", id: 441258766
