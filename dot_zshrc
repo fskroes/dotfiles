@@ -20,6 +20,8 @@ setopt HIST_IGNORE_ALL_DUPS # If a new command line being added to the history l
 setopt HIST_IGNORE_SPACE # No history when starting command with space
 setopt HIST_SAVE_NO_DUPS # When writing out the history file, older commands that duplicate newer ones are omitted
 
+export PATH=/opt/homebrew/bin:$PATH
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -51,18 +53,13 @@ HIST_STAMPS="dd.mm.yyyy"
 
 # Plugins
 plugins=(
-  git 
-  aliases     # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aliases
-  direnv      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/direnv
-  encode64    # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/encode64
-  gitignore   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gitignore
-  golang      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/golang
+  git
+  encode64 
   gpg-agent   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gpg-agent
   kubectl     # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
   macos       # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/macos
   man         # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/man
   npm         # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/npm
-  yarn        # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/yarn 
   nvm 
   zsh-syntax-highlighting 
   zsh-autosuggestions
@@ -159,4 +156,3 @@ export CPPFLAGS="-I/usr/local/opt/openjdk@17/include"
 # ---------------------------------------------------------------------------------------------------------------------
 export CURRENT_AWS="echo \"\${AWS_PROFILE:-default}(\${AWS_DEFAULT_REGION:-\${AWS_REGION:-\$(cat ~/.aws/config | sed -n -E \"/\\\[((profile \$AWS_PROFILE)|\${AWS_PROFILE:-default})\\\]/,/\\[/p;/\\\[/d\" | grep region | cut -f2- -d=)}})\""
 
-export PATH=/opt/homebrew/bin:$PATH
