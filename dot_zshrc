@@ -53,23 +53,15 @@ HIST_STAMPS="dd.mm.yyyy"
 plugins=(
   git 
   aliases     # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aliases
-  aws         # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/aws
   direnv      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/direnv
   encode64    # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/encode64
   gitignore   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gitignore
   golang      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/golang
   gpg-agent   # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gpg-agent
-  heroku      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/heroku
-  istioctl    # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/istioctl
   kubectl     # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectl
-  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/kubectx
   macos       # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/macos
   man         # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/man
   npm         # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/npm
-  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/pass
-  # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/ssh-agent
-  thefuck     # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/thefuck
-  vscode      # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/vscode
   yarn        # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/yarn 
   nvm 
   zsh-syntax-highlighting 
