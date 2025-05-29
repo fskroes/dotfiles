@@ -1,0 +1,266 @@
+#!/bin/bash
+{{ if (eq .chezmoi.os "darwin") -}}
+
+# Color codes for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+NC='\033[0m' # No Color
+
+# Counters for summary
+TOTAL_CHECKS=0
+PASSED_CHECKS=0
+WARNINGS=0
+
+echo "=========================================="
+echo "🔍 Verifying macOS Development Setup"
+echo "=========================================="
+echo ""
+
+# Function to check if a command exists
+check_command() {
+  local cmd=$1
+  local name=${2:-$1}
+  ((TOTAL_CHECKS++))
+  
+  if command -v "$cmd" &> /dev/null; then
+    echo -e "${GREEN}✓${NC} $name is installed: $(command -v "$cmd")"
+    ((PASSED_CHECKS++))
+    return 0
+  else
+    echo -e "${RED}✗${NC} $name is NOT installed"
+    return 1
+  fi
+}
+
+# Function to check if a setting is applied
+check_setting() {
+  local setting=$1
+  local expected=$2
+  local description=$3
+  ((TOTAL_CHECKS++))
+  
+  local actual=$(defaults read $setting 2>/dev/null)
+  
+  if [ "$actual" = "$expected" ]; then
+    echo -e "${GREEN}✓${NC} $description"
+    ((PASSED_CHECKS++))
+    return 0
+  else
+    echo -e "${RED}✗${NC} $description (expected: $expected, got: $actual)"
+    return 1
+  fi
+}
+
+# Function to check if a setting exists (regardless of value)
+check_setting_exists() {
+  local setting=$1
+  local description=$2
+  ((TOTAL_CHECKS++))
+  
+  if defaults read $setting &>/dev/null; then
+    echo -e "${GREEN}✓${NC} $description is configured"
+    ((PASSED_CHECKS++))
+    return 0
+  else
+    echo -e "${YELLOW}⚠${NC} $description might not be configured"
+    ((WARNINGS++))
+    return 1
+  fi
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Package Managers & Core Tools
+# ---------------------------------------------------------------------------------------------------------------------
+echo "📦 Package Managers & Core Tools"
+echo "--------------------------------"
+check_command "brew" "Homebrew"
+check_command "git" "Git"
+check_command "nvm" "Node Version Manager"
+check_command "node" "Node.js"
+check_command "npm" "NPM"
+check_command "pnpm" "PNPM"
+check_command "yarn" "Yarn"
+check_command "starship" "Starship Prompt"
+echo ""
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Development Tools
+# ---------------------------------------------------------------------------------------------------------------------
+echo "🛠️  Development Tools"
+echo "-------------------"
+check_command "code" "Visual Studio Code"
+check_command "ghostty" "Ghostty Terminal"
+check_command "docker" "Docker"
+check_command "gpg" "GPG"
+
+# Check for global npm packages
+echo ""
+echo "📦 Global NPM Packages:"
+if command -v npm &> /dev/null; then
+  for pkg in stylelint textlint typescript nx; do
+    ((TOTAL_CHECKS++))
+    if npm list -g $pkg &> /dev/null; then
+      echo -e "${GREEN}✓${NC} $pkg is installed globally"
+      ((PASSED_CHECKS++))
+    else
+      echo -e "${RED}✗${NC} $pkg is NOT installed globally"
+    fi
+  done
+fi
+echo ""
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Shell Environment
+# ---------------------------------------------------------------------------------------------------------------------
+echo "🐚 Shell Environment"
+echo "-------------------"
+((TOTAL_CHECKS++))
+if [ -d "$HOME/.oh-my-zsh" ]; then
+  echo -e "${GREEN}✓${NC} Oh My Zsh is installed"
+  ((PASSED_CHECKS++))
+else
+  echo -e "${RED}✗${NC} Oh My Zsh is NOT installed"
+fi
+
+# Check for Zsh plugins
+for plugin in "zsh-autosuggestions" "zsh-syntax-highlighting"; do
+  ((TOTAL_CHECKS++))
+  if [ -d "$HOME/.oh-my-zsh/custom/plugins/$plugin" ]; then
+    echo -e "${GREEN}✓${NC} $plugin plugin is installed"
+    ((PASSED_CHECKS++))
+  else
+    echo -e "${RED}✗${NC} $plugin plugin is NOT installed"
+  fi
+done
+
+# Check if Starship is initialized in shell config
+((TOTAL_CHECKS++))
+if grep -q "starship init" "$HOME/.zshrc" 2>/dev/null; then
+  echo -e "${GREEN}✓${NC} Starship is initialized in .zshrc"
+  ((PASSED_CHECKS++))
+else
+  echo -e "${YELLOW}⚠${NC} Starship might not be initialized in .zshrc"
+  ((WARNINGS++))
+fi
+echo ""
+
+# ---------------------------------------------------------------------------------------------------------------------
+# System Settings Verification
+# ---------------------------------------------------------------------------------------------------------------------
+echo "⚙️  System Settings"
+echo "-----------------"
+check_setting "com.apple.screencapture location" "~/Documents/Screenshots" "Screenshot location"
+check_setting "NSGlobalDomain NSAutomaticDashSubstitutionEnabled" "1" "Smart dashes enabled"
+check_setting "com.apple.dock orientation" "bottom" "Dock position"
+check_setting "com.apple.dock tilesize" "43" "Dock icon size"
+check_setting "com.apple.finder AppleShowAllFiles" "1" "Hidden files visible in Finder"
+check_setting "com.apple.finder FXPreferredViewStyle" "Nlsv" "List view in Finder"
+check_setting "com.apple.TextEdit RichText" "0" "TextEdit plain text mode"
+echo ""
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Security Settings
+# ---------------------------------------------------------------------------------------------------------------------
+echo "🔒 Security Settings"
+echo "-------------------"
+check_setting "-app Terminal SecureKeyboardEntry" "1" "Secure keyboard entry in Terminal"
+
+# Check TouchID for sudo
+((TOTAL_CHECKS++))
+if grep -q "pam_tid.so" /etc/pam.d/sudo 2>/dev/null; then
+  echo -e "${GREEN}✓${NC} TouchID is enabled for sudo"
+  ((PASSED_CHECKS++))
+else
+  echo -e "${YELLOW}⚠${NC} TouchID is NOT enabled for sudo"
+  ((WARNINGS++))
+fi
+
+# Check firewall status
+((TOTAL_CHECKS++))
+if sudo defaults read /Library/Preferences/com.apple.alf globalstate 2>/dev/null | grep -q "1"; then
+  echo -e "${GREEN}✓${NC} Firewall is enabled"
+  ((PASSED_CHECKS++))
+else
+  echo -e "${RED}✗${NC} Firewall is NOT enabled"
+fi
+echo ""
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Application Settings
+# ---------------------------------------------------------------------------------------------------------------------
+echo "📱 Application Settings"
+echo "----------------------"
+check_setting_exists "com.if.Amphetamine 'Start Session At Launch'" "Amphetamine auto-start"
+check_setting_exists "com.docker.docker SUAutomaticallyUpdate" "Docker update settings"
+check_setting_exists "com.apple.Safari SendDoNotTrackHTTPHeader" "Safari Do Not Track"
+echo ""
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Directory Structure
+# ---------------------------------------------------------------------------------------------------------------------
+echo "📁 Directory Structure"
+echo "---------------------"
+((TOTAL_CHECKS++))
+if [ -d "$HOME/Documents/Screenshots" ]; then
+  echo -e "${GREEN}✓${NC} Screenshots directory exists"
+  ((PASSED_CHECKS++))
+else
+  echo -e "${YELLOW}⚠${NC} Screenshots directory doesn't exist (will be created on first screenshot)"
+  ((WARNINGS++))
+fi
+echo ""
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Homebrew Health
+# ---------------------------------------------------------------------------------------------------------------------
+echo "🍺 Homebrew Health"
+echo "-----------------"
+if command -v brew &> /dev/null; then
+  echo "Running brew doctor (this might take a moment)..."
+  if brew doctor &> /dev/null; then
+    echo -e "${GREEN}✓${NC} Homebrew is healthy"
+  else
+    echo -e "${YELLOW}⚠${NC} Homebrew has some issues (run 'brew doctor' for details)"
+    ((WARNINGS++))
+  fi
+  
+  # Check for autoupdate
+  ((TOTAL_CHECKS++))
+  if [ -f "$HOME/Library/LaunchAgents/com.github.domt4.homebrew-autoupdate.plist" ]; then
+    echo -e "${GREEN}✓${NC} Homebrew autoupdate is configured"
+    ((PASSED_CHECKS++))
+  else
+    echo -e "${YELLOW}⚠${NC} Homebrew autoupdate might not be configured"
+    ((WARNINGS++))
+  fi
+fi
+echo ""
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Summary
+# ---------------------------------------------------------------------------------------------------------------------
+echo "=========================================="
+echo "📊 Setup Verification Summary"
+echo "=========================================="
+echo -e "Total checks: $TOTAL_CHECKS"
+echo -e "Passed: ${GREEN}$PASSED_CHECKS${NC}"
+echo -e "Failed: ${RED}$((TOTAL_CHECKS - PASSED_CHECKS - WARNINGS))${NC}"
+echo -e "Warnings: ${YELLOW}$WARNINGS${NC}"
+echo ""
+
+if [ $PASSED_CHECKS -eq $TOTAL_CHECKS ]; then
+  echo -e "${GREEN}🎉 All checks passed! Your system is fully configured.${NC}"
+elif [ $((TOTAL_CHECKS - PASSED_CHECKS - WARNINGS)) -eq 0 ]; then
+  echo -e "${YELLOW}✅ Setup is mostly complete with some warnings.${NC}"
+  echo "   Review the warnings above and address if needed."
+else
+  echo -e "${RED}❌ Some checks failed. Please review the output above.${NC}"
+  echo ""
+  echo "Common fixes:"
+  echo "• Run 'chezmoi apply' to reapply configurations"
+  echo "• Check if all prerequisite scripts have run successfully"
+  echo "• Some settings may require a logout/restart to take effect"
+fi
+
+{{ end -}}

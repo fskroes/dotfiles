@@ -1,34 +1,76 @@
 #!/bin/bash
 {{ if (eq .chezmoi.os "darwin") -}}
 
-# Close App Store apps in case this script updates them
-killall Amphetamine Xcode Magnet
+# ---------------------------------------------------------------------------------------------------------------------
+# Shell Environment Setup
+# ---------------------------------------------------------------------------------------------------------------------
+# Install Oh My Zsh if not already installed
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+  echo "Installing Oh My Zsh..."
+  sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
 
-# Install ZSH
-# sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+# Install zsh-autosuggestions plugin
+if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions" ]; then
+  echo "Installing zsh-autosuggestions..."
+  git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+fi
 
-# Install zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+# Install zsh-syntax-highlighting plugin
+if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting" ]; then
+  echo "Installing zsh-syntax-highlighting..."
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+fi
 
-# Install zsh-syntax-highlighting
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+# ---------------------------------------------------------------------------------------------------------------------
+# Node.js Environment Setup
+# ---------------------------------------------------------------------------------------------------------------------
+# Install NVM if not already installed
+if [ ! -d "$HOME/.nvm" ]; then
+  echo "Installing NVM..."
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/latest/install.sh | bash
+  
+  # Load NVM for immediate use
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+else
+  # Load NVM if already installed
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+fi
 
-# Install Powerlevel10k
-# git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
+# Install latest LTS version of Node.js
+echo "Installing latest Node.js LTS..."
+nvm install --lts
+nvm use --lts
+nvm alias default lts/*
 
-# Disable quarantine for casks
-#export HOMEBREW_CASK_OPTS=--no-quarantine
+# ---------------------------------------------------------------------------------------------------------------------
+# Global Node.js Packages
+# ---------------------------------------------------------------------------------------------------------------------
+echo "Installing global Node.js packages..."
+npm install -g \
+  stylelint@latest \
+  textlint@latest \
+  typescript@latest \
+  nx@latest \
+  pnpm@latest \
+  yarn@latest
 
-#brew bundle
+# ---------------------------------------------------------------------------------------------------------------------
+# Verify Installations
+# ---------------------------------------------------------------------------------------------------------------------
+echo "Verifying installations..."
+echo "Node version: $(node --version)"
+echo "NPM version: $(npm --version)"
+echo "NVM version: $(nvm --version)"
+
+# Verify Starship is installed (should be done via Homebrew)
+if command -v starship &> /dev/null; then
+  echo "Starship version: $(starship --version)"
+else
+  echo "Warning: Starship not found. Make sure it's installed via Homebrew."
+fi
 
 {{ end -}}
-
-# Install latest stable version of Node.js
-nvm install lts
-
-# Install latest versions of global Node.js packages
-npm install -g\
-  stylelint@latest\
-  textlint@latest\
-  typescript@latest\
-  nx@latest
