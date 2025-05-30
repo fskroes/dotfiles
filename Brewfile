@@ -24,7 +24,7 @@ cask "alfred"
 cask "docker"
 cask "jetbrains-toolbox"
 cask "obsidian"
-cask "iterm2"
+cask "ghostty"
 cask "github"
 cask "stats"
 mas "Amphetamine", id: 937984704
