@@ -25,7 +25,6 @@ cask "jetbrains-toolbox"
 cask "obsidian"
 cask "ghostty"
 cask "github"
-cask "stats"
 mas "Amphetamine", id: 937984704
 mas "Bitwarden", id: 1352778147
 mas "Magnet", id: 441258766
